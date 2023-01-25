@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { supabase } from "../supabaseClient";
 import {
   CalendarIcon,
   EnvelopeIcon,
@@ -6,6 +8,34 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function Form() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [studentNum, setStudentNum] = useState("");
+  const [notes, setNotes] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data, error } = await supabase.from("interest_form").insert([
+        {
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          phone_num: phoneNum,
+          student_num: studentNum,
+          notes: notes,
+        },
+      ]);
+
+      window.location.href = "/thankyou";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="bg-gray-600 h-screen">
       <div className="mx-auto max-w-7xl py-4 sm:py-12 lg:px-8 ">
@@ -209,11 +239,7 @@ export default function Form() {
               <h3 className="text-lg font-medium text-gray-900">
                 Produhacks Interest Form
               </h3>
-              <form
-                action="#"
-                method="POST"
-                className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8"
-              >
+              <form className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
                 <div>
                   <label
                     htmlFor="first-name"
@@ -223,9 +249,12 @@ export default function Form() {
                   </label>
                   <div className="mt-1">
                     <input
+                      required
                       type="text"
                       name="first-name"
                       id="first-name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       autoComplete="given-name"
                       className="block w-full rounded-md border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     />
@@ -240,8 +269,11 @@ export default function Form() {
                   </label>
                   <div className="mt-1">
                     <input
+                      required
                       type="text"
                       name="last-name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       id="last-name"
                       autoComplete="family-name"
                       className="block w-full rounded-md border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -261,6 +293,9 @@ export default function Form() {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
                       className="block w-full rounded-md border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     />
                   </div>
@@ -281,6 +316,8 @@ export default function Form() {
                     <input
                       type="text"
                       name="phone"
+                      value={phoneNum}
+                      onChange={(e) => setPhoneNum(e.target.value)}
                       id="phone"
                       autoComplete="tel"
                       className="block w-full rounded-md border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -299,6 +336,9 @@ export default function Form() {
                     <input
                       type="text"
                       name="subject"
+                      value={studentNum}
+                      onChange={(e) => setStudentNum(e.target.value)}
+                      required
                       id="subject"
                       className="block w-full rounded-md border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     />
@@ -310,7 +350,7 @@ export default function Form() {
                       htmlFor="message"
                       className="block text-sm font-medium text-gray-900"
                     >
-                      Message
+                      Additional Notes
                     </label>
                     <span id="message-max" className="text-sm text-gray-500">
                       Max. 500 characters
@@ -320,6 +360,8 @@ export default function Form() {
                     <textarea
                       id="message"
                       name="message"
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
                       rows={4}
                       className="block w-full rounded-md border-gray-300 py-3 px-4 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                       aria-describedby="message-max"
@@ -330,6 +372,7 @@ export default function Form() {
                 <div className="sm:col-span-2 sm:flex sm:justify-end">
                   <button
                     type="submit"
+                    onClick={handleSubmit}
                     className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                   >
                     Submit
