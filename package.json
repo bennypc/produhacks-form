@@ -1,0 +1,19 @@
+{
+  "name": "produhacks-form",
+  "version": "1.0.0",
+  "description": "produhacks interest form site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bennypc/produhacks-form.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bennypc/produhacks-form/issues"
+  },
+  "homepage": "https://github.com/bennypc/produhacks-form#readme"
+}
