@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import {
   CalendarIcon,
   EnvelopeIcon,
@@ -7,7 +10,12 @@ import {
   PhoneIcon,
 } from "@heroicons/react/24/outline";
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
 export default function Form() {
+  const [selectedEvent, setSelectedEvent] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,6 +35,7 @@ export default function Form() {
           phone_num: phoneNum,
           student_num: studentNum,
           notes: notes,
+          selectedEvent: selectedEvent,
         },
       ]);
 
@@ -44,7 +53,17 @@ export default function Form() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3">
             {/* Additional information */}
-            <div className="relative overflow-hidden bg-indigo-700 py-10 px-6 sm:px-10 xl:p-12 rounded-3xl shadow-xl">
+            <div
+              className={`relative overflow-hidden ${
+                selectedEvent === "ProduHacks"
+                  ? "bg-[#0C1731]"
+                  : selectedEvent === "Innovent"
+                  ? "bg-blue-900"
+                  : selectedEvent === "Data Beyond"
+                  ? "bg-[#ABD5F9]"
+                  : "bg-indigo-700"
+              } py-10 px-6 sm:px-10 xl:p-12 rounded-3xl shadow-xl transition duration-500 ease-in-out`}
+            >
               <div
                 className="pointer-events-none absolute inset-0 sm:hidden"
                 aria-hidden="true"
@@ -144,34 +163,196 @@ export default function Form() {
                   </defs>
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-white">
-                Event Information
-              </h3>
-              <p className="mt-6 max-w-3xl text-base text-indigo-50">
-                Nullam risus blandit ac aliquam justo ipsum. Quam mauris
-                volutpat massa dictumst amet. Sapien tortor lacus arcu.
+              <div className="mb-8 flex justify-between items-center">
+                <h3
+                  className={`text-lg font-medium ${
+                    selectedEvent === "ProduHacks"
+                      ? "text-[#22C031]"
+                      : selectedEvent === "Innovent"
+                      ? "text-white"
+                      : selectedEvent === "Data Beyond"
+                      ? "text-black"
+                      : "text-white"
+                  }  float-left`}
+                >
+                  Event Information
+                </h3>
+
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left float-right"
+                >
+                  <div>
+                    <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                      {selectedEvent ? selectedEvent : "Select Event"}
+                      <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true"
+                      />
+                    </Menu.Button>
+                  </div>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        <Menu.Item
+                          onClick={() => setSelectedEvent("ProduHacks")}
+                        >
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              ProduHacks
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item onClick={() => setSelectedEvent("Innovent")}>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Innovent
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item
+                          onClick={() => setSelectedEvent("Data Beyond")}
+                        >
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Data Beyond
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+
+              <p
+                className={`mt-6 max-w-3xl text-base ${
+                  selectedEvent === "ProduHacks"
+                    ? "text-white"
+                    : selectedEvent === "Innovent"
+                    ? "text-white"
+                    : selectedEvent === "Data Beyond"
+                    ? "text-black"
+                    : "text-white"
+                }`}
+              >
+                {selectedEvent === "ProduHacks" ? (
+                  <span>
+                    ProduHacks is a competition that has the best aspects of
+                    both case competitions and hackathons. We strive to help
+                    students build technical and business skills that will
+                    contribute to their success within the workplace.
+                  </span>
+                ) : selectedEvent === "Innovent" ? (
+                  <span>
+                    Innovent is a business and engineer case competition that is
+                    intended to foster collaboration between faculties.
+                  </span>
+                ) : selectedEvent === "Data Beyond" ? (
+                  <span>
+                    Data & Beyond is a half-day conference targeted towards
+                    junior students at UBC interested in discovering more about
+                    the prospects of data science-related careers.
+                  </span>
+                ) : (
+                  <span>Please select an event!</span>
+                )}
               </p>
               <dl className="mt-8 space-y-6">
                 <dt>
                   <span className="sr-only">Phone number</span>
                 </dt>
-                <dd className="flex text-base text-indigo-50">
-                  <CalendarIcon
-                    className="h-6 w-6 flex-shrink-0 text-indigo-200"
-                    aria-hidden="true"
-                  />
-                  <span className="ml-3">April 1st - 2nd</span>
-                </dd>
-                <dt>
-                  <span className="sr-only">Email</span>
-                </dt>
-                <dd className="flex text-base text-indigo-50">
-                  <MapIcon
-                    className="h-6 w-6 flex-shrink-0 text-indigo-200"
-                    aria-hidden="true"
-                  />
-                  <span className="ml-3">Henry Angus Building</span>
-                </dd>
+
+                {selectedEvent === "ProduHacks" ? (
+                  <dd className="flex text-base text-indigo-50">
+                    <CalendarIcon
+                      className="h-6 w-6 flex-shrink-0 text-indigo-200"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3">April 1st - 2nd</span>
+                  </dd>
+                ) : selectedEvent === "Innovent" ? (
+                  <dd className="flex text-base text-indigo-50">
+                    <CalendarIcon
+                      className="h-6 w-6 flex-shrink-0 text-indigo-200"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3">March 3rd - 5th</span>
+                  </dd>
+                ) : selectedEvent === "Data Beyond" ? (
+                  <dd className="flex text-base text-black">
+                    <CalendarIcon
+                      className="h-6 w-6 flex-shrink-0 text-black"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3">March 17th</span>
+                  </dd>
+                ) : (
+                  <dd className="flex text-base text-indigo-50"></dd>
+                )}
+
+                {selectedEvent === "ProduHacks" ? (
+                  <dd className="flex text-base text-indigo-50">
+                    <MapIcon
+                      className="h-6 w-6 flex-shrink-0 text-indigo-200"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3">Henry Angus Building</span>
+                  </dd>
+                ) : selectedEvent === "Innovent" ? (
+                  <dd className="flex text-base text-indigo-50">
+                    <MapIcon
+                      className="h-6 w-6 flex-shrink-0 text-indigo-200"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3">MacLeod Building</span>
+                  </dd>
+                ) : selectedEvent === "Data Beyond" ? (
+                  <dd className="flex text-base text-indigo-50">
+                    <MapIcon
+                      className="h-6 w-6 flex-shrink-0 text-black"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3 text-black">
+                      Henry Angus Building
+                    </span>
+                  </dd>
+                ) : (
+                  <dd className="flex text-base text-indigo-50"></dd>
+                )}
               </dl>
               {/* <ul role="list" className="mt-8 flex space-x-12">
                 <li>
@@ -237,7 +418,7 @@ export default function Form() {
             {/* Contact form */}
             <div className="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
               <h3 className="text-lg font-medium text-gray-900">
-                Produhacks Interest Form
+                BizTech Interest Form
               </h3>
               <form className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
                 <div>
@@ -344,6 +525,7 @@ export default function Form() {
                     />
                   </div>
                 </div>
+
                 <div className="sm:col-span-2">
                   <div className="flex justify-between">
                     <label
