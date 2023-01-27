@@ -46,7 +46,7 @@ export default function Form() {
   };
 
   return (
-    <div className="bg-gray-600 h-screen">
+    <div className="bg-gray-500 h-screen">
       <div className="mx-auto max-w-7xl py-4 sm:py-12 lg:px-8 ">
         <div className="relative bg-white shadow-xl rounded-3xl">
           <h2 className="sr-only">Information</h2>
@@ -555,7 +555,23 @@ export default function Form() {
                   <button
                     type="submit"
                     onClick={handleSubmit}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                    className={`mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent ${
+                      selectedEvent === "ProduHacks"
+                        ? "bg-[#0C1731]"
+                        : selectedEvent === "Innovent"
+                        ? "bg-blue-900"
+                        : selectedEvent === "Data Beyond"
+                        ? "bg-[#ABD5F9]"
+                        : "bg-indigo-700"
+                    } px-6 py-3 text-base font-medium ${
+                      selectedEvent === "ProduHacks"
+                        ? "text-[#22C031]"
+                        : selectedEvent === "Innovent"
+                        ? "text-white"
+                        : selectedEvent === "Data Beyond"
+                        ? "text-black"
+                        : "text-white"
+                    } shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto`}
                   >
                     Submit
                   </button>
