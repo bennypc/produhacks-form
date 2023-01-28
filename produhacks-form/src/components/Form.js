@@ -27,17 +27,34 @@ export default function Form() {
     e.preventDefault();
 
     try {
-      const { data, error } = await supabase.from("interest_form").insert([
-        {
-          first_name: firstName,
-          last_name: lastName,
-          email: email,
-          phone_num: phoneNum,
-          student_num: studentNum,
-          notes: notes,
-          selectedEvent: selectedEvent,
-        },
-      ]);
+      if (selectedEvent === "All Events") {
+        const events = ["ProduHacks", "Data Beyond", "Innovent"];
+        for (const event of events) {
+          await supabase.from("interest_form").insert([
+            {
+              first_name: firstName,
+              last_name: lastName,
+              email: email,
+              phone_num: phoneNum,
+              student_num: studentNum,
+              notes: notes,
+              selectedEvent: event,
+            },
+          ]);
+        }
+      } else {
+        const { data, error } = await supabase.from("interest_form").insert([
+          {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone_num: phoneNum,
+            student_num: studentNum,
+            notes: notes,
+            selectedEvent: selectedEvent,
+          },
+        ]);
+      }
 
       window.location.href = "/thankyou";
     } catch (error) {
