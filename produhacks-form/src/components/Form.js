@@ -455,8 +455,7 @@ export default function Form() {
             {/* Contact form */}
             <div className="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
               <h3 className="text-lg font-medium text-gray-900">
-                BizTech Interest Form (Don't forget to select an event on the
-                left!)
+                BizTech Interest Form (Don't forget to select an event!)
               </h3>
               <form className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
                 <div>
